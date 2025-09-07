@@ -59,7 +59,7 @@ build {
 
       # Install Tailscale
       "sudo apt-get update",
-      "sudo apt-get install -y tailscale",
+      "sudo apt-get install -y tailscale"
     ]
   }
 }
