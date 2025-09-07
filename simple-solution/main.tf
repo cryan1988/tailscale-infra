@@ -3,9 +3,10 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "public" {
+  count             = 3
   vpc_id            = aws_vpc.main.id
-  cidr_block        = var.public_subnet_cidr
-  availability_zone = "${var.aws_region}a"
+  cidr_block        = var.public_subnet_cidrs[count.index] 
+  availability_zone = data.aws_availability_zones.available.names[count.index] 
 }
 
 resource "aws_internet_gateway" "gw" {
@@ -22,8 +23,9 @@ resource "aws_route_table" "rt" {
 }
 
 resource "aws_route_table_association" "rta" {
+  count          = length(aws_subnet.public)
   route_table_id = aws_route_table.rt.id
-  subnet_id      = aws_subnet.public.id
+  subnet_id      = aws_subnet.public[count.index].id
 }
 
 # ---------------------------
@@ -87,7 +89,7 @@ resource "aws_eip" "ip" {
 resource "aws_instance" "ec2" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.server_instance_type
-  subnet_id     = aws_subnet.public.id
+  subnet_id     = aws_subnet.public[0].id 
   key_name      = "tailscale-network"
 
   vpc_security_group_ids = [
@@ -96,6 +98,10 @@ resource "aws_instance" "ec2" {
 
   root_block_device {
     volume_size = var.server_storage_size
+
+    tags = {
+      Environment = "engineering"
+    }
   }
 
   tags = {
@@ -118,10 +124,40 @@ resource "aws_instance" "private-ec2" {
 
   root_block_device {
     volume_size = var.server_storage_size
+
+    tags = {
+      Environment = "engineering"
+    }
   }
 
   tags = {
     Name        = "private-subnet-instance-${count.index + 1}"
+    Environment = "engineering"
+    Service     = "pne"
+  }
+}
+
+resource "aws_instance" "tailscale-installed" {
+  count         = 1
+  ami           = "ami-071c4abb2fd20328a" ## ami with tailscale installed 
+  instance_type = var.server_instance_type
+  subnet_id     = aws_subnet.private.id
+  key_name      = "tailscale-network"
+
+  vpc_security_group_ids = [
+    aws_security_group.sg.id,
+  ]
+
+  root_block_device {
+    volume_size = var.server_storage_size
+
+    tags = {
+      Environment = "engineering"
+    }
+  }
+
+  tags = {
+    Name        = "tailscale-installed"
     Environment = "engineering"
     Service     = "pne"
   }

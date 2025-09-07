@@ -21,3 +21,6 @@ data "aws_ami" "ubuntu" {
 
   most_recent = true
 }
+
+# Get all available AZs in the region
+data "aws_availability_zones" "available" {}

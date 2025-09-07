@@ -10,10 +10,13 @@ variable "vpc_cidr_block" {
   default     = "10.0.0.0/24"
 }
 
-variable "public_subnet_cidr" {
-  description = "Subnet CIDR block"
-  type        = string
-  default     = "10.0.0.0/28"
+variable "public_subnet_cidrs" {
+  type = list(string)
+  default = [
+    "10.0.0.0/28",
+    "10.0.0.32/28",
+    "10.0.0.48/28"
+  ]
 }
 
 variable "private_subnet_cidr" {
@@ -56,50 +59,27 @@ variable "server_hostname" {
   default     = "vpn"
 }
 
-variable "server_start_expression" {
-  description = "Server start schedule expression"
-  type        = string
-  default     = "cron(0 10 * * ? *)"
-}
+#variable "tailscale_api_key" {
+#  description = "Tailscale API access token"
+#  type        = string
+#  sensitive   = true
+#}
+#
+#variable "tailscale_tailnet" {
+#  description = "Tailscale tailnet name"
+#  type        = string
+#  default     = "conal.ryan1988@gmail.com"
+#}
+#
+#variable "tailscale_tailnet_key_expiry" {
+#  description = "Tailscale tailnet key expiry"
+#  type        = number
+#  default     = 2419200
+#}
+#
+#variable "tailscale_package_url" {
+#  description = "Tailscale package download URL"
+#  type        = string
+#  default     = "https://pkgs.tailscale.com/stable/ubuntu/jammy"
+#}
 
-variable "server_stop_expression" {
-  description = "Server stop schedule expression"
-  type        = string
-  default     = "cron(0 1 * * ? *)"
-}
-
-variable "log_retention" {
-  description = "CloudWatch log retention"
-  type        = number
-  default     = 14
-}
-
-variable "tailscale_api_key" {
-  description = "Tailscale API access token"
-  type        = string
-  sensitive   = true
-}
-
-variable "tailscale_tailnet" {
-  description = "Tailscale tailnet name"
-  type        = string
-  default     = "conal.ryan1988@gmail.com"
-}
-
-variable "tailscale_tailnet_key_expiry" {
-  description = "Tailscale tailnet key expiry"
-  type        = number
-  default     = 2419200
-}
-
-variable "tailscale_package_url" {
-  description = "Tailscale package download URL"
-  type        = string
-  default     = "https://pkgs.tailscale.com/stable/ubuntu/jammy"
-}
-
-variable "timeout" {
-  description = "Provision timeout"
-  type        = string
-  default     = "30m"
-}
