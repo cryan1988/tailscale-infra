@@ -41,6 +41,11 @@ source "amazon-ebs" "ubuntu" {
 
   ami_name        = "tailscale-ubuntu-jammy-{{timestamp}}"
   ami_description = "Ubuntu 22.04 AMI with Tailscale installed"
+
+  tags = {
+    Service     = "PRE"
+    Environment = "engineering"
+  }
 }
 
 build {
