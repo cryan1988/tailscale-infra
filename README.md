@@ -10,6 +10,9 @@ The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isol
 
 ### Placeholder for Architecture diagram
 
+<img width="940" height="627" alt="image" src="https://github.com/user-attachments/assets/2c1f6837-c9cb-4bc6-88b8-903aecbaf53d" />
+
+
 #### References
 To create this infrastructure I mainly made use of the following 3 sources:
 
