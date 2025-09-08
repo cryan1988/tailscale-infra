@@ -1,3 +1,5 @@
+# Find the most recent ubuntu-jammy-22.04-arm64-server ami
+
 data "aws_ami" "ubuntu" {
   filter {
     name = "name"

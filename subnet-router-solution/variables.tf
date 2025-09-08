@@ -19,10 +19,14 @@ variable "public_subnet_cidrs" {
   ]
 }
 
-variable "private_subnet_cidr" {
+variable "private_subnet_cidrs" {
   description = "Private subnet CIDR block"
-  type        = string
-  default     = "10.0.0.16/28"
+  type = list(string)
+  default = [
+    "10.0.0.16/28",
+    "10.0.0.64/28",
+    "10.0.0.80/28"
+  ]
 }
 
 variable "ami_filter" {
@@ -59,24 +63,24 @@ variable "server_hostname" {
   default     = "vpn"
 }
 
+variable "tailscale_auth_key" {
+  description = "Auth key for registering instances"
+  type        = string
+  sensitive   = true
+}
+
 #variable "tailscale_api_key" {
 #  description = "Tailscale API access token"
 #  type        = string
 #  sensitive   = true
 #}
-#
+
 #variable "tailscale_tailnet" {
 #  description = "Tailscale tailnet name"
 #  type        = string
 #  default     = "conal.ryan1988@gmail.com"
 #}
-#
-#variable "tailscale_tailnet_key_expiry" {
-#  description = "Tailscale tailnet key expiry"
-#  type        = number
-#  default     = 2419200
-#}
-#
+
 #variable "tailscale_package_url" {
 #  description = "Tailscale package download URL"
 #  type        = string

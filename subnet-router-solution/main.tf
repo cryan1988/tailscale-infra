@@ -32,9 +32,10 @@ resource "aws_route_table_association" "rta" {
 # Private Subnet
 # ---------------------------
 resource "aws_subnet" "private" {
+  count                   = 3
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.private_subnet_cidr
-  availability_zone       = "${var.aws_region}a"
+  cidr_block              = var.private_subnet_cidrs[count.index] 
+  availability_zone       = data.aws_availability_zones.available.names[count.index] 
   map_public_ip_on_launch = false
 }
 
@@ -43,7 +44,8 @@ resource "aws_route_table" "private_rt" {
 }
 
 resource "aws_route_table_association" "private_rta" {
-  subnet_id      = aws_subnet.private.id
+  count          = length(aws_subnet.public)
+  subnet_id      = aws_subnet.private[count.index].id 
   route_table_id = aws_route_table.private_rt.id
 }
 
@@ -51,15 +53,26 @@ resource "aws_security_group" "sg" {
   name   = "${var.server_hostname}-${var.aws_region}"
   vpc_id = aws_vpc.main.id
 
-  ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+  egress {
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
 
     cidr_blocks = [
       "0.0.0.0/0",
     ]
+  }
+}
+
+resource "aws_security_group" "private_sg" {
+  name   = "${var.aws_region}-private-security-group"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["2.100.5.99/32"]
   }
 
   egress {
@@ -73,24 +86,25 @@ resource "aws_security_group" "sg" {
   }
 }
 
-resource "aws_eip" "ip" {
-  instance = aws_instance.ec2.id
-  domain   = "vpc"
-
-  depends_on = [
-    aws_internet_gateway.gw,
-  ]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_instance" "ec2" {
-  ami           = data.aws_ami.ubuntu.id
+resource "aws_instance" "subnet-router" {
+  count         = length(aws_subnet.private)
+  ami           = "ami-071c4abb2fd20328a" ## ami with tailscale installed
   instance_type = var.server_instance_type
-  subnet_id     = aws_subnet.public[0].id 
+  subnet_id     = aws_subnet.private[count.index].id
   key_name      = "tailscale-network"
+
+  ## Register the instance with our tailnet
+  user_data = <<-EOF
+    #!/bin/bash
+    set -e
+    echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+    echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale.conf
+    sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
+    
+    sudo systemctl enable --now tailscaled
+    sleep 5
+    tailscale up --auth-key="${var.tailscale_auth_key}" --advertise-routes=10.0.0.0/28,10.0.0.16/28,10.0.0.32/28,10.0.0.48/28,10.0.0.64/28 --ssh
+  EOF
 
   vpc_security_group_ids = [
     aws_security_group.sg.id,
@@ -105,21 +119,36 @@ resource "aws_instance" "ec2" {
   }
 
   tags = {
-    Name        = "tailscale-subnet-router"
+    Name        = "tailscale-subnet-router-${data.aws_availability_zones.available.names[count.index]}" 
     Environment = "engineering"
     Service     = "pne"
   }
 }
 
+## Assign public ips to each subnet router
+resource "aws_eip" "ip" {
+  count    = length(aws_instance.subnet-router)
+  instance = aws_instance.subnet-router[count.index].id
+  domain   = "vpc"
+
+  depends_on = [
+    aws_internet_gateway.gw,
+  ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
 resource "aws_instance" "private-ec2" {
-  count		= 2
+  count         = length(aws_subnet.private)
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.server_instance_type
-  subnet_id     = aws_subnet.private.id
+  subnet_id     = aws_subnet.private[count.index].id 
   key_name      = "tailscale-network"
 
   vpc_security_group_ids = [
-    aws_security_group.sg.id,
+    aws_security_group.private_sg.id,
   ]
 
   root_block_device {
@@ -138,11 +167,18 @@ resource "aws_instance" "private-ec2" {
 }
 
 resource "aws_instance" "tailscale-installed" {
-  count         = 1
+  count         = length(aws_subnet.private)
   ami           = "ami-071c4abb2fd20328a" ## ami with tailscale installed 
   instance_type = var.server_instance_type
-  subnet_id     = aws_subnet.private.id
+  subnet_id     = aws_subnet.private[count.index].id 
   key_name      = "tailscale-network"
+
+  ## Register the instance with our tailnet
+  user_data = <<-EOF
+    #!/bin/bash
+    set -e
+    tailscale up --auth-key="${var.tailscale_auth_key}" --ssh --accept-routes
+  EOF
 
   vpc_security_group_ids = [
     aws_security_group.sg.id,

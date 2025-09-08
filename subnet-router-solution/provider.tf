@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 1.5.0"
 
-  # Use S3 as the remote backend for state management with DynamoDB for state locking
+  # Use S3 as the remote backend for state management
   backend "s3" {
     bucket         = "apptio-tailscale-terraform-state"
     key            = "tailscale-infra/terraform.tfstate"
