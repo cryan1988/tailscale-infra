@@ -20,7 +20,7 @@ and located in a private subnet.
 
 
 #### References
-To create this infrastructure I mainly made use of the following 3 sources:
+To create this infrastructure I mainly made use of the following 4 sources:
 
 - [Tailscale on AWS installation guide](https://tailscale.com/kb/1021/install-aws)  
 - [Tailscale subnet routers documentation](https://tailscale.com/kb/1019/subnets)  
