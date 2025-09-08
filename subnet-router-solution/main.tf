@@ -72,9 +72,7 @@ resource "aws_security_group" "sg" {
     to_port   = 0
     protocol  = "-1"
 
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
+    cidr_blocks = ["0.0.0.0/0",]
   }
 }
 
@@ -86,7 +84,7 @@ resource "aws_security_group" "private_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["2.100.5.99/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -94,9 +92,7 @@ resource "aws_security_group" "private_sg" {
     to_port   = 0
     protocol  = "-1"
 
-    cidr_blocks = [
-      "0.0.0.0/0",
-    ]
+    cidr_blocks = ["0.0.0.0/0",]
   }
 }
 
