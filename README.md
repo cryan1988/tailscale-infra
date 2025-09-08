@@ -1,6 +1,6 @@
 # Tailscale infrastructure
 
-This subnet-router-solution folder contains a Terraform configuration which deploys a high availability Tailscale subnet router set up.
+The subnet-router-solution folder contains a Terraform configuration which deploys a high availability Tailscale subnet router set up.
 The infrastructure deployed primarily consists of a VPC with 6 subnets, a NAT Gateway, 2 Security Groups and 9 EC2 instances.
 
 The EC2s are deployed as follows:
