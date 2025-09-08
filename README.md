@@ -1,3 +1,22 @@
-# tailscale-infra
-Contains a basic Tailnet deployment
+# Tailscale infrastructure
 
+This subnet-router-solution folder contains a Terraform configuration which deploys a high availability Tailscale subnet router set up.
+The infrastructure deployed primarily consists of a VPC with 6 subnets, a NAT Gateway, 2 Security Groups and 9 EC2 instances.
+
+The EC2s are deployed as follows:
+3 Subnet routers in each AZ and each public subnet, 3 EC2s in the privates subnets with Tailscale installed, 3 EC2s in the private subnets without Tailscale
+
+The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isolated in the eu-west-1c private subnet, this is by design for demonstration purposes.
+
+### Placeholder for Architecture diagram
+
+
+
+
+# AMI Creation
+ami-packer folder:
+A Github Action has been used to create a custom AMI with Tailscale installed, this AMI is being used by the subnet routers and 3 of the EC2s in the private subnet.
+The Action calls a packer image builder file which runs the commands necessary to install Tailscale on each machine.
+
+NOTE: I have since removed the credentials for the iam user that was used in the build, re-running the workflow will not complete without an error
+This set up was for a demonstration purpose only on how we might build an AMI.
