@@ -10,7 +10,8 @@ The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isol
 
 ### Architecture Diagram
 
-<img width="1471" height="1095" alt="image" src="https://github.com/user-attachments/assets/75f42078-4636-4039-a6e5-10cdbe5ebfd5" />
+<img width="1849" height="1366" alt="image" src="https://github.com/user-attachments/assets/c4116470-ed39-4a26-99e6-4433aa466b42" />
+
 
 
 
