@@ -1,4 +1,4 @@
-# Tailscale infrastructure
+# Tailscale Infrastructure
 
 The subnet-router-solution folder contains a Terraform configuration which deploys a high availability Tailscale subnet router set up.
 The infrastructure deployed primarily consists of a VPC with 6 subnets, a NAT Gateway, 2 Security Groups and 9 EC2 instances.
@@ -8,9 +8,10 @@ The EC2s are deployed as follows:
 
 The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isolated in the eu-west-1c private subnet, this is by design for demonstration purposes.
 
-### Placeholder for Architecture diagram
+### Architecture Diagram
 
-<img width="940" height="627" alt="image" src="https://github.com/user-attachments/assets/2c1f6837-c9cb-4bc6-88b8-903aecbaf53d" />
+<img width="1457" height="1083" alt="image" src="https://github.com/user-attachments/assets/71be86d5-c2d5-48d5-97e3-f9ac35d2115a" />
+
 
 
 #### References
