@@ -10,6 +10,9 @@ The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isol
 
 ### Architecture Diagram
 
+The diagram below shows the basic architecture that is created in the AWS account, as well as an example route of how we can reach an EC2 instance NOT installed with Tailscale
+and located in a private subnet.
+
 <img width="1849" height="1366" alt="image" src="https://github.com/user-attachments/assets/c4116470-ed39-4a26-99e6-4433aa466b42" />
 
 
