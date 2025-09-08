@@ -12,11 +12,11 @@ The subnet routers are advertising 5/6 of the subnets, leaving 1 completely isol
 
 #### References
 To create this infrastructure I mainly made use of the following 3 sources:
-https://tailscale.com/kb/1021/install-aws
-https://tailscale.com/kb/1019/subnets
-and
-https://ayltai.medium.com/create-your-own-personal-vpn-with-tailscale-on-aws-using-terraform-e54ea2b90ab2
-https://github.com/ayltai/terraform-tailscale/tree/master
+
+- [Tailscale on AWS installation guide](https://tailscale.com/kb/1021/install-aws)  
+- [Tailscale subnet routers documentation](https://tailscale.com/kb/1019/subnets)  
+- [Blog: Create your own personal VPN with Tailscale on AWS using Terraform](https://ayltai.medium.com/create-your-own-personal-vpn-with-tailscale-on-aws-using-terraform-e54ea2b90ab2)  
+- [Terraform Tailscale GitHub repository](https://github.com/ayltai/terraform-tailscale/tree/master)  
 
 # AMI Creation
 
