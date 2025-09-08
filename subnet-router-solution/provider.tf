@@ -1,3 +1,5 @@
+## Terraform configuration and providers needed
+
 terraform {
   required_version = ">= 1.5.0"
 

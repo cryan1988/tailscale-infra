@@ -1,6 +1,6 @@
 ## Creates a private/pubic key pair called tailscale-network
-### Key is used for all EC2 instances in this vpc
-### Private key can be found in the Param store in the /tailscale/private-key directory
+# Key is used for all EC2 instances in this vpc
+# Private key can be found in the Param store in the /tailscale/private-key directory
 
 resource "tls_private_key" "pk" {
   algorithm = "RSA"
