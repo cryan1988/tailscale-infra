@@ -34,10 +34,10 @@ The Action calls a packer image builder file located in the *ami-packer/* folder
 
 NOTE: I have since removed the credentials for the iam user that was used in the build, re-running the workflow will not complete without an error.
 
+This set up was for a demonstration purpose only on how we might build an AMI.
+
 ## End Result
 Below is an image of the infrastructure that is created, as seen in the admin console of the tailnet:
 
 <img width="1225" height="1353" alt="image" src="https://github.com/user-attachments/assets/c92a2f04-dfbc-42c7-bb8a-38a1e6647e14" />
 
-
-This set up was for a demonstration purpose only on how we might build an AMI.
