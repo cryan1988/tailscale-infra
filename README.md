@@ -32,5 +32,6 @@ To create this infrastructure I mainly made use of the following 4 sources:
 A Github Action has been used to create a custom AMI with Tailscale installed, this AMI is being used by the subnet routers and 3 of the EC2s in the private subnet.
 The Action calls a packer image builder file located in the *ami-packer/* folder which runs the commands necessary to install Tailscale on each machine.
 
-NOTE: I have since removed the credentials for the iam user that was used in the build, re-running the workflow will not complete without an error
+NOTE: I have since removed the credentials for the iam user that was used in the build, re-running the workflow will not complete without an error.
+
 This set up was for a demonstration purpose only on how we might build an AMI.
