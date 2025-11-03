@@ -49,7 +49,19 @@ Below is an image of the infrastructure that is created, as seen in the admin co
 
 
 
-Further reading on Tailscale:
 
+
+
+
+
+
+
+
+
+
+
+
+
+Further reading on Tailscale:
 
 https://tailscale.com/blog/how-nat-traversal-works
