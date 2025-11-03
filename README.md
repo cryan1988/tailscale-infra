@@ -42,3 +42,5 @@ Below is an image of the infrastructure that is created, as seen in the admin co
 <img width="1229" height="921" alt="image" src="https://github.com/user-attachments/assets/b31f4bb1-de0a-4c3a-9e45-a1c993b4c611" />
 
 
+Further reading on Tailscale:
+https://tailscale.com/blog/how-nat-traversal-works
