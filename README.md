@@ -23,7 +23,8 @@ and located in a private subnet from outside the VPC.
 To create this infrastructure I mainly made use of the following 4 sources:
 
 - [Tailscale on AWS installation guide](https://tailscale.com/kb/1021/install-aws)  
-- [Tailscale subnet routers documentation](https://tailscale.com/kb/1019/subnets)  
+- [Tailscale subnet routers documentation](https://tailscale.com/kb/1019/subnets) 
+- [Tailscale NAT Traversal](https://tailscale.com/blog/how-nat-traversal-works) 
 - [Blog: Create your own personal VPN with Tailscale on AWS using Terraform](https://ayltai.medium.com/create-your-own-personal-vpn-with-tailscale-on-aws-using-terraform-e54ea2b90ab2)  
 - [Terraform Tailscale GitHub repository](https://github.com/ayltai/terraform-tailscale/tree/master)  
 
