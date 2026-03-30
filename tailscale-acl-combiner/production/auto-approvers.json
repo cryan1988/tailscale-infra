@@ -1,0 +1,7 @@
+{
+  "autoApprovers": {
+    "routes": {
+      "172.16.0.0/16": ["tag:subnet-router"]
+    }
+  }
+}

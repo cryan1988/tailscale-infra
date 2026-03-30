@@ -1,0 +1,27 @@
+{
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["autogroup:member"],
+      "dst": ["autogroup:self"],
+      "users": ["autogroup:nonroot", "root"]
+    },
+    {
+      "action": "accept",
+      "src": ["conal.ryan1988@gmail.com"],
+      "dst": [
+        "tag:server",
+        "autogroup:self",
+        "autogroup:tagged",
+        "conal.ryan1988@gmail.com"
+      ],
+      "users": ["root", "ubuntu"]
+    },
+    {
+      "action": "accept",
+      "src": ["autogroup:admin"],
+      "dst": ["tag:subnet-router"],
+      "users": ["autogroup:nonroot", "root"]
+    }
+  ]
+}
