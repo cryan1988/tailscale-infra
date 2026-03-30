@@ -56,6 +56,6 @@
   "groups": {
     // Test dev group
     "group:dev": ["conal.ryan1988@gmail.com"],
-    "group:group-2": [],
+    "group:group-2": ["conal.ryan1988@gmail.com"],
   },
 }
