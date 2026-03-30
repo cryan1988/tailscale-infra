@@ -8,6 +8,7 @@
     "prod-management-subnet": "10.0.1.0/24",
     "prod-load-balancer-ips": "10.0.100.0/28",
     "prod-external-office": "203.0.113.0/24",
-    "prod-backup-storage": "10.0.50.0/24"
+    "prod-backup-storage": "10.0.50.0/24",
+    "prod-new-example": "10.0.43.0/24"
   }
 }
