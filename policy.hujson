@@ -27,15 +27,6 @@
 		"group:prod-web-servers":       ["tag:prod-web", "tag:prod-api"],
 		"group:prod-internal-services": ["tag:prod-monitoring", "tag:prod-logging", "tag:prod-metrics"],
 		"group:prod-ci-cd":             ["tag:prod-jenkins", "tag:prod-gitlab-runner"],
-
-		// from `tailscale-acl-combiner/production/groups.json`
-		"group:prod-admins": ["admin@company.com", "ops-team@company.com"],
-
-		"group:prod-developers":        ["dev1@company.com", "dev2@company.com", "dev-team@company.com"],
-		"group:prod-databases":         ["tag:prod-postgres", "tag:prod-mysql", "tag:prod-redis"],
-		"group:prod-web-servers":       ["tag:prod-web", "tag:prod-api"],
-		"group:prod-internal-services": ["tag:prod-monitoring", "tag:prod-logging", "tag:prod-metrics"],
-		"group:prod-ci-cd":             ["tag:prod-jenkins", "tag:prod-gitlab-runner"],
 	},
 
 	"hosts": {
@@ -51,45 +42,10 @@
 		"prod-external-office":   "203.0.113.0/24",
 		"prod-backup-storage":    "10.0.50.0/24",
 		"prod-new-example":       "10.0.43.0/24",
-
-		// from `tailscale-acl-combiner/production/ipsets.json`
-		"prod-vpc-primary": "10.0.0.0/16",
-
-		"prod-vpc-secondary":     "10.1.0.0/16",
-		"prod-database-subnet":   "10.0.10.0/24",
-		"prod-web-subnet":        "10.0.20.0/24",
-		"prod-internal-subnet":   "10.0.30.0/24",
-		"prod-management-subnet": "10.0.1.0/24",
-		"prod-load-balancer-ips": "10.0.100.0/28",
-		"prod-external-office":   "203.0.113.0/24",
-		"prod-backup-storage":    "10.0.50.0/24",
-		"prod-new-example":       "10.0.43.0/24",
 	},
 
 	"postures": {
 		// from `policy.hujson`
-		"posture:prod-secure-device": [
-			"node:os IN ['windows', 'macos', 'linux']",
-			"node:tsReleaseTrack == 'stable'",
-			"node:tailscaleUpdate == 'current'",
-			"node:isEncrypted == true",
-		],
-
-		"posture:prod-managed-workstation": [
-			"node:os IN ['windows', 'macos']",
-			"node:tailscaleUpdate == 'current'",
-			"node:isEncrypted == true",
-		],
-		"posture:prod-server": ["node:os == 'linux'", "node:tailscaleUpdate == 'current'"],
-
-		"posture:prod-critical-access": [
-			"node:os IN ['windows', 'macos', 'linux']",
-			"node:tsReleaseTrack == 'stable'",
-			"node:tailscaleUpdate == 'current'",
-			"node:isEncrypted == true",
-		],
-
-		// from `tailscale-acl-combiner/production/posture.json`
 		"posture:prod-secure-device": [
 			"node:os IN ['windows', 'macos', 'linux']",
 			"node:tsReleaseTrack == 'stable'",
@@ -144,19 +100,6 @@
 
 	"tagOwners": {
 		// from `policy.hujson`
-		"tag:prod-postgres": ["group:prod-admins"],
-
-		"tag:prod-mysql":         ["group:prod-admins"],
-		"tag:prod-redis":         ["group:prod-admins"],
-		"tag:prod-web":           ["group:prod-admins", "group:prod-developers"],
-		"tag:prod-api":           ["group:prod-admins", "group:prod-developers"],
-		"tag:prod-monitoring":    ["group:prod-admins"],
-		"tag:prod-logging":       ["group:prod-admins"],
-		"tag:prod-metrics":       ["group:prod-admins"],
-		"tag:prod-jenkins":       ["group:prod-admins"],
-		"tag:prod-gitlab-runner": ["group:prod-admins"],
-
-		// from `tailscale-acl-combiner/production/groups.json`
 		"tag:prod-postgres": ["group:prod-admins"],
 
 		"tag:prod-mysql":         ["group:prod-admins"],
