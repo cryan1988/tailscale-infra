@@ -1,0 +1,17 @@
+{
+  "postures": {
+    "posture:dev-any-device": [
+      "node:os IN ['windows', 'macos', 'linux', 'ios', 'android']"
+    ],
+    "posture:dev-workstation": [
+      "node:os IN ['windows', 'macos', 'linux']",
+      "node:tailscaleUpdate IN ['current', 'outofdate']"
+    ],
+    "posture:dev-updated-client": [
+      "node:tailscaleUpdate == 'current'"
+    ],
+    "posture:dev-linux-server": [
+      "node:os == 'linux'"
+    ]
+  }
+}

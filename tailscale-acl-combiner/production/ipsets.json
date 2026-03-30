@@ -1,0 +1,13 @@
+{
+  "hosts": {
+    "prod-vpc-primary": "10.0.0.0/16",
+    "prod-vpc-secondary": "10.1.0.0/16",
+    "prod-database-subnet": "10.0.10.0/24",
+    "prod-web-subnet": "10.0.20.0/24",
+    "prod-internal-subnet": "10.0.30.0/24",
+    "prod-management-subnet": "10.0.1.0/24",
+    "prod-load-balancer-ips": "10.0.100.0/28",
+    "prod-external-office": "203.0.113.0/24",
+    "prod-backup-storage": "10.0.50.0/24"
+  }
+}

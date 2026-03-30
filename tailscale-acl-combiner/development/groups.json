@@ -1,0 +1,46 @@
+{
+  "groups": {
+    "group:dev-team": [
+      "dev1@company.com",
+      "dev2@company.com",
+      "dev3@company.com",
+      "intern@company.com"
+    ],
+    "group:dev-leads": [
+      "lead-dev@company.com",
+      "architect@company.com"
+    ],
+    "group:dev-databases": [
+      "tag:dev-postgres",
+      "tag:dev-mysql",
+      "tag:dev-mongodb"
+    ],
+    "group:dev-services": [
+      "tag:dev-api",
+      "tag:dev-web",
+      "tag:dev-worker"
+    ],
+    "group:dev-infrastructure": [
+      "tag:dev-k8s-node",
+      "tag:dev-docker-host",
+      "tag:dev-build-server"
+    ],
+    "group:dev-testing": [
+      "tag:dev-test-runner",
+      "tag:dev-staging"
+    ]
+  },
+  "tagOwners": {
+    "tag:dev-postgres": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-mysql": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-mongodb": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-api": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-web": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-worker": ["group:dev-leads", "group:dev-team"],
+    "tag:dev-k8s-node": ["group:dev-leads"],
+    "tag:dev-docker-host": ["group:dev-leads"],
+    "tag:dev-build-server": ["group:dev-leads"],
+    "tag:dev-test-runner": ["group:dev-team"],
+    "tag:dev-staging": ["group:dev-leads"]
+  }
+}

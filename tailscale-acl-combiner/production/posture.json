@@ -1,0 +1,25 @@
+{
+  "postures": {
+    "posture:prod-secure-device": [
+      "node:os IN ['windows', 'macos', 'linux']",
+      "node:tsReleaseTrack == 'stable'",
+      "node:tailscaleUpdate == 'current'",
+      "node:isEncrypted == true"
+    ],
+    "posture:prod-managed-workstation": [
+      "node:os IN ['windows', 'macos']",
+      "node:tailscaleUpdate == 'current'",
+      "node:isEncrypted == true"
+    ],
+    "posture:prod-server": [
+      "node:os == 'linux'",
+      "node:tailscaleUpdate == 'current'"
+    ],
+    "posture:prod-critical-access": [
+      "node:os IN ['windows', 'macos', 'linux']",
+      "node:tsReleaseTrack == 'stable'",
+      "node:tailscaleUpdate == 'current'",
+      "node:isEncrypted == true"
+    ]
+  }
+}

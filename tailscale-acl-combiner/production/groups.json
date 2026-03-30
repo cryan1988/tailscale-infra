@@ -1,0 +1,43 @@
+{
+  "groups": {
+    "group:prod-admins": [
+      "admin@company.com",
+      "ops-team@company.com"
+    ],
+    "group:prod-developers": [
+      "dev1@company.com",
+      "dev2@company.com",
+      "dev-team@company.com"
+    ],
+    "group:prod-databases": [
+      "tag:prod-postgres",
+      "tag:prod-mysql",
+      "tag:prod-redis"
+    ],
+    "group:prod-web-servers": [
+      "tag:prod-web",
+      "tag:prod-api"
+    ],
+    "group:prod-internal-services": [
+      "tag:prod-monitoring",
+      "tag:prod-logging",
+      "tag:prod-metrics"
+    ],
+    "group:prod-ci-cd": [
+      "tag:prod-jenkins",
+      "tag:prod-gitlab-runner"
+    ]
+  },
+  "tagOwners": {
+    "tag:prod-postgres": ["group:prod-admins"],
+    "tag:prod-mysql": ["group:prod-admins"],
+    "tag:prod-redis": ["group:prod-admins"],
+    "tag:prod-web": ["group:prod-admins", "group:prod-developers"],
+    "tag:prod-api": ["group:prod-admins", "group:prod-developers"],
+    "tag:prod-monitoring": ["group:prod-admins"],
+    "tag:prod-logging": ["group:prod-admins"],
+    "tag:prod-metrics": ["group:prod-admins"],
+    "tag:prod-jenkins": ["group:prod-admins"],
+    "tag:prod-gitlab-runner": ["group:prod-admins"]
+  }
+}

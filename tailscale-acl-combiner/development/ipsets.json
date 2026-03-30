@@ -1,0 +1,13 @@
+{
+  "hosts": {
+    "dev-vpc": "172.16.0.0/16",
+    "dev-database-subnet": "172.16.10.0/24",
+    "dev-app-subnet": "172.16.20.0/24",
+    "dev-k8s-cluster": "172.16.100.0/22",
+    "dev-build-servers": "172.16.30.0/24",
+    "dev-test-environment": "172.16.40.0/24",
+    "dev-staging-subnet": "172.16.50.0/24",
+    "dev-local-network": "192.168.1.0/24",
+    "dev-docker-network": "172.17.0.0/16"
+  }
+}
