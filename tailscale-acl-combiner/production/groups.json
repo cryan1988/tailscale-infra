@@ -8,24 +8,6 @@
       "dev1@company.com",
       "dev2@company.com",
       "dev-team@company.com"
-    ],
-    "group:prod-databases": [
-      "tag:prod-postgres",
-      "tag:prod-mysql",
-      "tag:prod-redis"
-    ],
-    "group:prod-web-servers": [
-      "tag:prod-web",
-      "tag:prod-api"
-    ],
-    "group:prod-internal-services": [
-      "tag:prod-monitoring",
-      "tag:prod-logging",
-      "tag:prod-metrics"
-    ],
-    "group:prod-ci-cd": [
-      "tag:prod-jenkins",
-      "tag:prod-gitlab-runner"
     ]
   },
   "tagOwners": {
