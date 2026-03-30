@@ -44,7 +44,87 @@ Below is an image of the infrastructure that is created, as seen in the admin co
 
 
 
+## Tailscale ACL GitOps
 
+Manage your [Tailscale](https://tailscale.com) access control policy as code. Changes merged to `main` are automatically synced to your tailnet via GitHub Actions.
+
+## Structure
+
+```
+.
+├── policy.hujson            # Main ACL policy (HuJSON format)
+├── tests/
+│   └── acl-tests.hujson    # ACL test cases
+└── .github/
+    └── workflows/
+        └── sync-acl.yml    # CI/CD workflow
+```
+
+## How it works
+
+| Event | Jobs run |
+|---|---|
+| PR against `main` | Lint → Test (dry-run) |
+| Push / merge to `main` | Lint → Test → **Apply** |
+
+The workflow uses the official [`tailscale/gitops-acl-action`](https://github.com/tailscale/gitops-acl-action).
+
+## Setup
+
+### 1. Create a Tailscale OAuth client
+
+1. Go to **Admin console → Settings → OAuth clients → Generate OAuth client**.
+2. Grant the `acls` scope with **Write** permission.
+3. Note the **Client ID** and **Client secret**.
+
+### 2. Add GitHub secrets
+
+| Secret | Value |
+|---|---|
+| `TS_OAUTH_CLIENT_ID` | OAuth client ID from step 1 |
+| `TS_OAUTH_SECRET` | OAuth client secret from step 1 |
+| `TS_TAILNET` | Your tailnet name (e.g. `example.com` or the magic DNS suffix) |
+
+Go to **Repo → Settings → Secrets and variables → Actions → New repository secret**.
+
+> **Alternative:** Use `TS_API_KEY` (an API key from the admin console) instead of OAuth credentials. API keys expire after 90 days and must be rotated manually, so OAuth is preferred.
+
+### 3. (Optional) Add a manual approval gate
+
+The workflow references a GitHub Environment named `production`. Create it under **Repo → Settings → Environments → New environment** and add required reviewers to gate the apply step behind a human approval.
+
+## Editing the policy
+
+1. Create a branch.
+2. Edit `policy.hujson` (HuJSON supports `//` comments and trailing commas).
+3. Add or update tests in `tests/acl-tests.hujson`.
+4. Open a pull request — the workflow will lint and test the policy automatically.
+5. Merge to `main` to apply.
+
+### Testing locally
+
+Install the [Tailscale CLI](https://tailscale.com/kb/1080/cli/) and run:
+
+```bash
+tailscale acl test --file policy.hujson --tests tests/acl-tests.hujson
+```
+
+## Policy overview
+
+| Group | Access |
+|---|---|
+| `group:admin` | Full access to all devices |
+| `group:dev` | SSH + web ports on `tag:staging` and `tag:dev` |
+| `group:infra` | Admin-level, owns `tag:prod` and `tag:ci` |
+| `tag:ci` | SSH + web ports on `tag:staging` (for deployments) |
+| `*` | Exit node traffic, HTTP/HTTPS everywhere |
+
+## References
+
+- [Tailscale ACL syntax](https://tailscale.com/kb/1337/acl-syntax)
+- [gitops-acl-action](https://github.com/tailscale/gitops-acl-action)
+- [Tailscale SSH](https://tailscale.com/kb/1193/tailscale-ssh)
+- [Device posture](https://tailscale.com/kb/1205/device-posture)
 
 
 

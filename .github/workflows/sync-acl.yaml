@@ -1,0 +1,115 @@
+name: Sync Tailscale ACL
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "policy.hujson"
+      - "tests/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "policy.hujson"
+      - "tests/**"
+
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Required if you use GitHub's OIDC token for Tailscale OAuth (see below).
+  id-token: write
+
+jobs:
+  # ── Validate ────────────────────────────────────────────────────────────────
+  validate:
+    name: Validate policy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint HuJSON syntax
+        # hujson is valid JSON5-like; this step parses the file to catch
+        # syntax errors before submitting to the Tailscale API.
+        run: |
+          python3 - <<'EOF'
+          import re, sys, json
+
+          with open("policy.hujson") as f:
+              raw = f.read()
+
+          # Strip // and /* */ comments (minimal HuJSON strip).
+          raw = re.sub(r'//[^\n]*', '', raw)
+          raw = re.sub(r'/\*.*?\*/', '', raw, flags=re.DOTALL)
+          # Remove trailing commas before ] or }
+          raw = re.sub(r',(\s*[}\]])', r'\1', raw)
+
+          try:
+              json.loads(raw)
+              print("policy.hujson is valid")
+          except json.JSONDecodeError as e:
+              print(f"JSON parse error: {e}", file=sys.stderr)
+              sys.exit(1)
+          EOF
+
+  # ── Test ─────────────────────────────────────────────────────────────────────
+  test:
+    name: Run ACL tests
+    runs-on: ubuntu-latest
+    needs: validate
+    # Only run tests if the tests/ directory exists.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for test files
+        id: check_tests
+        run: |
+          if [ -d tests ] && compgen -G "tests/*.hujson" > /dev/null; then
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+            echo "No test files found in tests/, skipping."
+          fi
+
+      - name: Run Tailscale ACL tests
+        if: steps.check_tests.outputs.has_tests == 'true'
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          oauth-client-id:     ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret:        ${{ secrets.TS_OAUTH_SECRET }}
+          tailnet:             ${{ secrets.TS_TAILNET }}
+          action:              test
+          acl-file:            policy.hujson
+          tests-file-pattern:  "tests/*.hujson"
+
+  # ── Apply (push to main only) ────────────────────────────────────────────────
+  apply:
+    name: Apply policy to Tailscale
+    runs-on: ubuntu-latest
+    needs: [validate, test]
+    # Only apply on pushes to main, not on pull requests.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment: production   # optional: adds a manual approval gate in GitHub
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply ACL via Tailscale GitOps action
+        uses: tailscale/gitops-acl-action@v1
+        with:
+          # Option A — OAuth credentials (recommended, supports key rotation).
+          oauth-client-id:  ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret:     ${{ secrets.TS_OAUTH_SECRET }}
+          tailnet:          ${{ secrets.TS_TAILNET }}
+
+          # Option B — API key (simpler, but keys expire after 90 days).
+          # api-key:        ${{ secrets.TS_API_KEY }}
+          # tailnet:        ${{ secrets.TS_TAILNET }}
+
+          action:   apply
+          acl-file: policy.hujson

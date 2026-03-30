@@ -1,0 +1,62 @@
+// Tailscale ACL test suite
+// Docs: https://tailscale.com/kb/1337/acl-syntax#tests
+// Run locally:  tailscale acl test --file policy.hujson --tests tests/acl-tests.hujson
+{
+  "tests": [
+    // ── Admin access ──────────────────────────────────────────────────────────
+    {
+      "name": "admin can reach prod on any port",
+      "src":  "alice@example.com",
+      "dst":  "tag:prod",
+      "allow": ["*:*"]
+    },
+    {
+      "name": "admin can reach staging",
+      "src":  "alice@example.com",
+      "dst":  "tag:staging",
+      "allow": ["*:443"]
+    },
+
+    // ── Developer access ──────────────────────────────────────────────────────
+    {
+      "name": "dev can reach staging on web ports",
+      "src":  "carol@example.com",
+      "dst":  "tag:staging",
+      "allow": ["*:80", "*:443", "*:8080"]
+    },
+    {
+      "name": "dev can SSH into dev machines",
+      "src":  "carol@example.com",
+      "dst":  "tag:dev",
+      "allow": ["*:22"]
+    },
+    {
+      "name": "dev cannot reach prod",
+      "src":  "carol@example.com",
+      "dst":  "tag:prod",
+      "deny": ["*:22", "*:443"]
+    },
+
+    // ── CI runner access ──────────────────────────────────────────────────────
+    {
+      "name": "CI can deploy to staging over SSH",
+      "src":  "tag:ci",
+      "dst":  "tag:staging",
+      "allow": ["*:22", "*:443"]
+    },
+    {
+      "name": "CI cannot reach prod",
+      "src":  "tag:ci",
+      "dst":  "tag:prod",
+      "deny": ["*:22", "*:443"]
+    },
+
+    // ── Exit node ─────────────────────────────────────────────────────────────
+    {
+      "name": "any user can use the exit node",
+      "src":  "carol@example.com",
+      "dst":  "tag:exit-node",
+      "allow": ["*:443"]
+    }
+  ]
+}
