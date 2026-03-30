@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Lint HuJSON syntax
         # hujson is valid JSON5-like; this step parses the file to catch
@@ -80,7 +80,7 @@ jobs:
         uses: tailscale/gitops-acl-action@v1
         with:
           oauth-client-id:     ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret:        ${{ secrets.TS_OAUTH_SECRET }}
+          audience:            ${{ secrets.TS_AUDIENCE }}
           tailnet:             ${{ secrets.TS_TAILNET }}
           action:              test
           acl-file:            policy.hujson
@@ -102,14 +102,8 @@ jobs:
       - name: Apply ACL via Tailscale GitOps action
         uses: tailscale/gitops-acl-action@v1
         with:
-          # Option A — OAuth credentials (recommended, supports key rotation).
           oauth-client-id:  ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret:     ${{ secrets.TS_OAUTH_SECRET }}
+          audience:         ${{ secrets.TS_AUDIENCE }}
           tailnet:          ${{ secrets.TS_TAILNET }}
-
-          # Option B — API key (simpler, but keys expire after 90 days).
-          # api-key:        ${{ secrets.TS_API_KEY }}
-          # tailnet:        ${{ secrets.TS_TAILNET }}
-
-          action:   apply
-          acl-file: policy.hujson
+          action:           apply
+          acl-file:         policy.hujson

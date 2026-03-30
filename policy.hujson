@@ -1,0 +1,61 @@
+// Example/default ACLs for unrestricted connections.
+{
+  "grants": [
+    // Allow all connections.
+    // Comment this section out if you want to define specific restrictions.
+    {
+      "src": ["*"],
+      "dst": ["*"],
+      "ip":  ["*"],
+    },
+
+  ],
+  // Define users and devices that can use Tailscale SSH.
+  "ssh": [
+    // The default SSH policy, which lets users SSH into devices they own.
+    // Learn more at https://tailscale.com/kb/1193/tailscale-ssh/
+    {
+      "action": "accept",
+      "src":    ["autogroup:member"],
+      "dst":    ["autogroup:self"],
+      "users":  ["autogroup:nonroot", "root"],
+    },
+    {
+      "src": ["conal.ryan1988@gmail.com"],
+
+      "dst": [
+      "tag:server",
+      "autogroup:self",
+      "autogroup:tagged",
+      "conal.ryan1988@gmail.com",
+      ],
+      "users":  ["root", "ubuntu"],
+      "action": "accept",
+    },
+    {
+      "action": "accept",
+      "src":    ["autogroup:admin"],
+      "dst":    ["tag:subnet-router"],
+      "users":  ["autogroup:nonroot", "root"],
+      },
+  ],
+
+  "tagOwners": {
+    // Tag applied to all standard servers in Tailnet
+    "tag:server": ["autogroup:admin"],
+
+    "tag:subnet-router": ["autogroup:admin"],
+    "tag:mendix":        ["autogroup:owner", "autogroup:admin"],
+    "tag:new":           ["tag:new"],
+    "tag:example":       ["tag:new"],
+    "tag:nowork":        ["autogroup:admin"],
+  },
+
+  "autoApprovers": {"routes": {"172.16.0.0/16": ["tag:subnet-router"]}},
+
+  "groups": {
+    // Test dev group
+    "group:dev": ["conal.ryan1988@gmail.com"],
+    "group:group-2": [],
+  },
+}
