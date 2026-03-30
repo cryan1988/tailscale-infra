@@ -83,7 +83,6 @@ jobs:
           audience:            ${{ secrets.TS_AUDIENCE }}
           tailnet:             ${{ secrets.TS_TAILNET }}
           action:              test
-          acl-file:            policy.hujson
           tests-file-pattern:  "tests/*.hujson"
 
   # ── Apply (push to main only) ────────────────────────────────────────────────
@@ -109,4 +108,3 @@ jobs:
           audience:         ${{ secrets.TS_AUDIENCE }}
           tailnet:          ${{ secrets.TS_TAILNET }}
           action:           apply
-          acl-file:         policy.hujson
