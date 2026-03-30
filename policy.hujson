@@ -49,18 +49,15 @@
 		"posture:prod-secure-device": [
 			"node:os IN ['windows', 'macos', 'linux']",
 			"node:tsReleaseTrack == 'stable'",
-			"node:isEncrypted == true",
 		],
 
 		"posture:prod-managed-workstation": [
 			"node:os IN ['windows', 'macos']",
-			"node:isEncrypted == true",
 		],
 
 		"posture:prod-critical-access": [
 			"node:os IN ['windows', 'macos', 'linux']",
 			"node:tsReleaseTrack == 'stable'",
-			"node:isEncrypted == true",
 		],
 	},
 
