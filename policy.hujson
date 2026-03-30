@@ -19,7 +19,7 @@
 	],
 
 	"groups": {
-		// from `policy.hujson`
+		// from `tailscale-acl-combiner/production/groups.json`
 		"group:prod-admins": ["admin@company.com", "ops-team@company.com"],
 
 		"group:prod-developers":        ["dev1@company.com", "dev2@company.com", "dev-team@company.com"],
@@ -30,7 +30,7 @@
 	},
 
 	"hosts": {
-		// from `policy.hujson`
+		// from `tailscale-acl-combiner/production/ipsets.json`
 		"prod-vpc-primary": "10.0.0.0/16",
 
 		"prod-vpc-secondary":     "10.1.0.0/16",
@@ -45,7 +45,7 @@
 	},
 
 	"postures": {
-		// from `policy.hujson`
+		// from `tailscale-acl-combiner/production/posture.json`
 		"posture:prod-secure-device": [
 			"node:os IN ['windows', 'macos', 'linux']",
 			"node:tsReleaseTrack == 'stable'",
@@ -54,10 +54,11 @@
 		"posture:prod-managed-workstation": [
 			"node:os IN ['windows', 'macos']",
 		],
+		"posture:prod-server": ["node:os == 'linux'"],
 
 		"posture:prod-critical-access": [
 			"node:os IN ['windows', 'macos', 'linux']",
-			"node:tsReleaseTrack == 'stable'",
+			"node:isEncrypted == true",
 		],
 	},
 
@@ -92,9 +93,10 @@
 	],
 
 	"tagOwners": {
-		// from `policy.hujson`
-		"tag:prod-postgres": ["group:prod-admins"],
+		// from `tailscale-acl-combiner/production/groups.json`
+		"tag:subnet-router": ["conal.ryan1988@gmail.com"],
 
+		"tag:prod-postgres":      ["group:prod-admins"],
 		"tag:prod-mysql":         ["group:prod-admins"],
 		"tag:prod-redis":         ["group:prod-admins"],
 		"tag:prod-web":           ["group:prod-admins", "group:prod-developers"],
