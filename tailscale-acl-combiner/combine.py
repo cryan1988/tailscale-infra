@@ -46,9 +46,24 @@ def combine_acl_files(environment: str, base_dir: Path) -> Dict[str, Any]:
     groups_data = load_json_file(env_dir / "groups.json")
     ipsets_data = load_json_file(env_dir / "ipsets.json")
     posture_data = load_json_file(env_dir / "posture.json")
+    grants_data = load_json_file(env_dir / "grants.json")
+    ssh_data = load_json_file(env_dir / "ssh.json")
+    auto_approvers_data = load_json_file(env_dir / "auto-approvers.json")
 
     # Combine into a single policy structure
     combined = {}
+
+    # Add grants from grants.json
+    if "grants" in grants_data:
+        combined["grants"] = grants_data["grants"]
+
+    # Add ssh from ssh.json
+    if "ssh" in ssh_data:
+        combined["ssh"] = ssh_data["ssh"]
+
+    # Add autoApprovers from auto-approvers.json
+    if "autoApprovers" in auto_approvers_data:
+        combined["autoApprovers"] = auto_approvers_data["autoApprovers"]
 
     # Add groups and tagOwners from groups.json
     if "groups" in groups_data:
@@ -69,29 +84,11 @@ def combine_acl_files(environment: str, base_dir: Path) -> Dict[str, Any]:
 
 def read_current_policy(policy_file: Path) -> Dict[str, Any]:
     """
-    Read the current policy.hujson file and extract sections we want to preserve.
-    This includes grants, ssh, autoApprovers, etc. that aren't in the modular files.
+    Read the current policy.hujson file (if it exists).
+    This function is kept for backwards compatibility but is no longer used
+    since all sections are now loaded from modular files.
     """
-    if not policy_file.exists():
-        return {}
-
-    try:
-        with open(policy_file, 'r') as f:
-            content = f.read()
-
-        # Simple parsing: remove comments and parse as JSON
-        import re
-        # Remove // comments
-        content = re.sub(r'//[^\n]*', '', content)
-        # Remove /* */ comments
-        content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
-        # Remove trailing commas
-        content = re.sub(r',(\s*[}\]])', r'\1', content)
-
-        return json.loads(content)
-    except Exception as e:
-        print(f"Warning: Could not parse existing policy.hujson: {e}", file=sys.stderr)
-        return {}
+    return {}
 
 
 def format_as_hujson(data: Dict[str, Any], indent: int = 2) -> str:
@@ -104,9 +101,9 @@ def format_as_hujson(data: Dict[str, Any], indent: int = 2) -> str:
     lines.append("// DO NOT EDIT DIRECTLY - Edit files in production/ or development/ directories")
     lines.append("{")
 
-    # Preserve specific keys in order: grants, ssh, then the combined sections
-    preserved_keys = ["grants", "ssh", "autoApprovers"]
-    combined_keys = ["groups", "tagOwners", "hosts", "postures"]
+    # All keys are now from modular files - no longer preserving from existing policy
+    preserved_keys = []
+    combined_keys = ["grants", "ssh", "autoApprovers", "groups", "tagOwners", "hosts", "postures"]
 
     def format_value(v, level=1):
         """Recursively format a value with proper indentation."""
@@ -204,15 +201,8 @@ def main():
 
     print(f"Combining ACL files from '{environment}' environment...")
 
-    # Read existing policy to preserve grants, ssh, etc.
-    existing_policy = read_current_policy(policy_file)
-
-    # Combine modular files
-    combined_sections = combine_acl_files(environment, base_dir)
-
-    # Merge: preserve existing sections, update with combined sections
-    final_policy = existing_policy.copy()
-    final_policy.update(combined_sections)
+    # Combine modular files (all sections are now modular)
+    final_policy = combine_acl_files(environment, base_dir)
 
     # Write to policy.hujson
     output = format_as_hujson(final_policy)
@@ -220,10 +210,13 @@ def main():
 
     print(f"✓ Successfully wrote combined policy to {policy_file}")
     print(f"  - Environment: {environment}")
-    print(f"  - Groups: {len(combined_sections.get('groups', {}))}")
-    print(f"  - Tag Owners: {len(combined_sections.get('tagOwners', {}))}")
-    print(f"  - Hosts: {len(combined_sections.get('hosts', {}))}")
-    print(f"  - Postures: {len(combined_sections.get('postures', {}))}")
+    print(f"  - Grants: {len(final_policy.get('grants', []))}")
+    print(f"  - SSH Rules: {len(final_policy.get('ssh', []))}")
+    print(f"  - Auto Approvers: {len(final_policy.get('autoApprovers', {}))}")
+    print(f"  - Groups: {len(final_policy.get('groups', {}))}")
+    print(f"  - Tag Owners: {len(final_policy.get('tagOwners', {}))}")
+    print(f"  - Hosts: {len(final_policy.get('hosts', {}))}")
+    print(f"  - Postures: {len(final_policy.get('postures', {}))}")
 
 
 if __name__ == "__main__":
