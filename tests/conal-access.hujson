@@ -3,7 +3,7 @@
   // conal-pi is owned by this user, so it falls under autogroup:self.
   // tag:ireland-pi is also checked as an explicit tagged destination.
   "tests": [
-    // SSH access to own machine (conal-pi is autogroup:self for this user)
+    // Make sure conal.ryan1988@gmail.com user always has access to conal-pi machine, tagged with ireland-pi
     {
       "src":    "conal.ryan1988@gmail.com",
       "accept":    "conal-pi",
