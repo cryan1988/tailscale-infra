@@ -9,8 +9,8 @@
 	"grants": [
 		// from `tailscale-acl-combiner/production/grants.json`
 		{
-			"src": ["*"],
-			"dst": ["*"],
+			"src": ["autogroup:admin"],
+			"dst": ["autogroup:self", "tag:ireland-pi"],
 			"ip":  ["*"],
 		},
 	],

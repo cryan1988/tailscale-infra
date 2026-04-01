@@ -1,8 +1,8 @@
 {
   "grants": [
     {
-      "src": ["*"],
-      "dst": ["*"],
+      "src": ["autogroup:admin"],
+      "dst": ["autogroup:self", "tag:ireland-pi"],
       "ip": ["*"]
     }
   ]
