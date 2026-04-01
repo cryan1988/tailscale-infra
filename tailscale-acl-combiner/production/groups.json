@@ -11,6 +11,7 @@
     ]
   },
   "tagOwners": {
+    "tag:ireland-pi": ["autogroup:admin"],
     "tag:server": ["conal.ryan1988@gmail.com"],
     "tag:subnet-router": ["conal.ryan1988@gmail.com"],
     "tag:prod-postgres": ["group:prod-admins"],
