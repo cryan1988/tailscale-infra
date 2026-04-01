@@ -95,7 +95,6 @@ jobs:
     needs: [acls, test]
     # Only apply on pushes to main, not on pull requests.
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    environment: production   # optional: adds a manual approval gate in GitHub
 
     steps:
       - name: Checkout
