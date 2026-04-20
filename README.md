@@ -1,5 +1,11 @@
 ## Tailscale Infrastructure
 
+## ts-appc-metrics
+
+The `ts-appc-metrics/` folder contains a Python script that surfaces traffic metrics for Tailscale App Connectors. It queries the Tailscale API to show who called a connector (inbound), what was forwarded to the backend (outbound), and a per-user breakdown with byte counts. See [`ts-appc-metrics/README.md`](ts-appc-metrics/README.md) for full usage.
+
+---
+
 The subnet-router-solution folder contains a Terraform configuration which deploys a high availability Tailscale subnet router set up.
 The infrastructure deployed primarily consists of a VPC with 6 subnets, a NAT Gateway, 2 Security Groups and 9 EC2 instances.
 
